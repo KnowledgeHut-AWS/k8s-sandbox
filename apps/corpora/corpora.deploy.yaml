@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: corpora
+  namespace: corpora
+  labels:
+    app: corpora
+spec:
+  selector:
+    matchLabels:
+      app: corpora
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: corpora
+    spec:
+      containers:
+      - name: corpora
+        image:  bryandollery/corpora
+        ports:
+        - containerPort:  80
+          name: corpora

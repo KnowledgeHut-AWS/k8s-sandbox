@@ -2,6 +2,11 @@
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: corpora
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: kafka
 ---
 apiVersion: v1

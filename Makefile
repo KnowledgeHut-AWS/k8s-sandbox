@@ -5,15 +5,12 @@ up: cluster-up init
 down: cluster-down
 
 cluster-down:
-	k3d cluster delete vault-labs
+	k3d cluster delete labs
 
 clean: logs
 	
-provision:
-	sudo snap install vault
-
 cluster-up:
-	k3d cluster create vault-labs \
+	k3d cluster create labs \
 	    -p 80:80@loadbalancer \
 	    -p 443:443@loadbalancer \
 	    -p 30000-32767:30000-32767@server[0] \
@@ -25,8 +22,8 @@ cluster-up:
 	    --agents 3
 
 init: logs repos namespaces
-install: install-service-mesh install-ingress install-logging install-monitoring install-secrets
-uninstall: delete-service-mesh delete-ingress delete-logging delete-monitoring delete-secrets
+platform: install-service-mesh install-ingress install-logging install-monitoring install-secrets
+deplatform: delete-service-mesh delete-ingress delete-logging delete-monitoring delete-secrets
 
 logs:
 	touch output.log

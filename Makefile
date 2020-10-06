@@ -20,7 +20,8 @@ cluster-up:
 	    -v /etc/machine-id:/etc/machine-id:ro \
 	    -v /var/log/journal:/var/log/journal:ro \
 	    -v /var/run/docker.sock:/var/run/docker.sock \
-		--k3s-server-arg '--no-deploy=traefik' \
+	    --k3s-server-arg '--no-deploy=traefik' \
+	    --image rancher/k3s:latest \
 	    --agents 3
 
 init: logs repos namespaces
@@ -51,13 +52,26 @@ install-corpora:
 delete-corpora:
 	kubectl delete -f apps/corpora 2>/dev/null | true
 
+install-kafka:
+	echo "kafka: install" | tee -a output.log
+	kubectl apply -f https://strimzi.io/install/latest?namespace=kafka -n kafka
+
+delete-kafka:
+	echo "kafka: delete" | tee -a output.log
+	kubectl delete -f https://strimzi.io/install/latest?namespace=kafka -n kafka
+
+install-kafka-default-topic:
+	kubectl apply -f https://strimzi.io/examples/latest/kafka/kafka-persistent-single.yaml -n kafka
+
 install-cicd:
+	echo "cicd: install" | tee -a output.log
 	kubectl apply -f https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
 	kubectl apply -f https://storage.googleapis.com/tekton-releases/dashboard/latest/tekton-dashboard-release.yaml
 	kubectl patch svc tekton-dashboard -n tekton-pipelines --type='json' -p '[{"op":"replace", "path":"/spec/type", "value":"NodePort"}]'
 	kubectl apply -f https://raw.githubusercontent.com/tektoncd/catalog/master/task/git-clone/0.2/git-clone.yaml
 
 delete-cicd:
+	echo "cicd: delete" | tee -a output.log
 	kubectl delete -f https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
 	kubectl delete -f https://storage.googleapis.com/tekton-releases/dashboard/latest/tekton-dashboard-release.yaml
 

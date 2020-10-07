@@ -48,6 +48,14 @@ install-corpora:
 delete-corpora:
 	kubectl delete -f apps/corpora 2>/dev/null | true
 
+install-cassandra:
+	echo "Cassandra: install" | tee -a output.log
+	kubectl apply -f https://raw.githubusercontent.com/datastax/cass-operator/v1.4.1/docs/user/cass-operator-manifests-v1.18.yaml
+
+delete-cassandra:
+	echo "Cassandra: delete" | tee -a output.log
+	kubectl delete -f https://raw.githubusercontent.com/datastax/cass-operator/v1.4.1/docs/user/cass-operator-manifests-v1.18.yaml
+
 install-kafka:
 	echo "kafka: install" | tee -a output.log
 	kubectl apply -f https://strimzi.io/install/latest?namespace=kafka -n kafka

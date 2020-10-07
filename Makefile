@@ -18,7 +18,6 @@ cluster-up:
 	    -v /var/log/journal:/var/log/journal:ro \
 	    -v /var/run/docker.sock:/var/run/docker.sock \
 	    --k3s-server-arg '--no-deploy=traefik' \
-	    --image rancher/k3s:latest \
 	    --agents 3
 
 init: logs repos namespaces

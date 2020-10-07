@@ -17,7 +17,6 @@ cluster-up:
 	    -v /etc/machine-id:/etc/machine-id:ro \
 	    -v /var/log/journal:/var/log/journal:ro \
 	    -v /var/run/docker.sock:/var/run/docker.sock \
-	    --k3s-server-arg '--no-deploy=traefik' \
 	    --agents 3
 
 init: logs repos namespaces
@@ -106,7 +105,7 @@ delete-secrets:
 
 install-ingress:
 	echo "Ingress: install" | tee -a output.log
-	kubectl apply -n ingress-nginx -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-0.32.0/deploy/static/provider/cloud/deploy.yaml | tee -a output.log
+	kubectl apply -n ingress-nginx -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/cloud/deploy.yaml | tee -a output.log
 	kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=120s
 
 delete-ingress:

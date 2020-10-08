@@ -6,15 +6,23 @@ metadata:
   namespace: corpora
   labels:
     app: corpora
+    chaos: "true"
+    kube-monkey/enabled: enabled
+    kube-monkey/identifier: corpora
+    kube-monkey/mtbf: '1'
+    kube-monkey/kill-mode: 'fixed'
+    kube-monkey/kill-value: '2'
 spec:
   selector:
     matchLabels:
       app: corpora
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
         app: corpora
+        kube-monkey/enabled: enabled
+        kube-monkey/identifier: corpora
     spec:
       containers:
       - name: corpora

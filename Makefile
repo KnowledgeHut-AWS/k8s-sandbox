@@ -55,6 +55,16 @@ delete-cassandra:
 	echo "Cassandra: delete" | tee -a output.log
 	kubectl delete -f https://raw.githubusercontent.com/datastax/cass-operator/v1.4.1/docs/user/cass-operator-manifests-v1.18.yaml
 
+install-chaos:
+	echo "Chaos: install" | tee -a output.log
+	kubectl create configmap km-config --from-file testing/chaos/config.toml -n corpora
+	kubectl apply -f testing/chaos -n corpora
+
+delete-chaos:
+	echo "Chaos: delete" | tee -a output.log
+	kubectl delete configmap km-config
+	kubectl delete -f testing/chaos -n corpora
+
 install-kafka:
 	echo "kafka: install" | tee -a output.log
 	kubectl apply -f https://strimzi.io/install/latest?namespace=kafka -n kafka
